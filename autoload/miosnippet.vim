@@ -37,29 +37,12 @@ function! s:echo_warning(msg)
     echohl WarningMsg | echo a:msg | echohl None
 endfunction
 
-function! s:get_neocomplete_omni()
-    return neocomplete#get_current_neocomplete().sources.omni
-endfunction
-
-function! s:get_candidates(neocomplete_omni, omni_context)
-    let candidates = a:neocomplete_omni.gather_candidates(a:omni_context)
-
-    if len(candidates)
-        return candidates
-    endif
-
-    " call complete() manually to get candidates
-    call a:neocomplete_omni.get_complete_position(a:omni_context)
-    return a:neocomplete_omni.gather_candidates(a:omni_context)
+function! s:get_candidates(context)
+    return [get(v:, 'completed_item', {})]
 endfunction
 
 function! s:get_config(context)
-    let omnifuncs = keys(a:context.source__complete_results)
-    if !len(omnifuncs)
-        return {}
-    endif
-
-    return get(s:miosnippet_config, omnifuncs[0], {})
+    return get(s:miosnippet_config, &omnifunc, {})
 endfunction
 
 function! s:parse_signature(signature, config)
@@ -99,16 +82,15 @@ endfunction
 function! miosnippet#generate()
     let cursor_pos = col('.') - 1
 
-    let neocomplete_omni = s:get_neocomplete_omni()
-    let omni_context = neocomplete_omni.neocomplete__context
+    let context = {}
 
-    let candidates = s:get_candidates(neocomplete_omni, omni_context)
+    let candidates = s:get_candidates(context)
     if !len(candidates)
         call s:echo_warning('no candidates')
         return ''
     endif
 
-    let config = s:get_config(omni_context)
+    let config = s:get_config(context)
     if config == {}
         call s:echo_warning('no config')
         return ''

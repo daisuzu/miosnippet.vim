@@ -1,13 +1,11 @@
 miosnippet
 ==========
 
-This plugin generates a snippet of the `Method signature` in `Insert mode` from `Omni source`
-of [neocomplete](https://github.com/Shougo/neocomplete.vim)
+This plugin generates a snippet of the `Method signature` in `Insert mode` from `omnifunc`
 for [neosnippet](https://github.com/Shougo/neosnippet.vim).
 
 ## Requirements
 
-* [neocomplete](https://github.com/Shougo/neocomplete.vim)
 * [neosnippet](https://github.com/Shougo/neosnippet.vim)
 * omni completion plugin
     * [vim-go](https://github.com/fatih/vim-go)
