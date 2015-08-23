@@ -37,11 +37,11 @@ function! s:echo_warning(msg)
     echohl WarningMsg | echo a:msg | echohl None
 endfunction
 
-function! s:get_candidates(context)
+function! s:get_candidates()
     return [get(v:, 'completed_item', {})]
 endfunction
 
-function! s:get_config(context)
+function! s:get_config()
     return get(s:miosnippet_config, &omnifunc, {})
 endfunction
 
@@ -82,15 +82,13 @@ endfunction
 function! miosnippet#generate()
     let cursor_pos = col('.') - 1
 
-    let context = {}
-
-    let candidates = s:get_candidates(context)
+    let candidates = s:get_candidates()
     if !len(candidates)
         call s:echo_warning('no candidates')
         return ''
     endif
 
-    let config = s:get_config(context)
+    let config = s:get_config()
     if config == {}
         call s:echo_warning('no config')
         return ''
