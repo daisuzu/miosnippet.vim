@@ -37,8 +37,8 @@ function! s:echo_warning(msg)
     echohl WarningMsg | echo a:msg | echohl None
 endfunction
 
-function! s:get_candidates()
-    return [get(v:, 'completed_item', {})]
+function! s:get_candidate()
+    return get(v:, 'completed_item', {})
 endfunction
 
 function! s:get_config()
@@ -82,9 +82,9 @@ endfunction
 function! miosnippet#generate()
     let cursor_pos = col('.') - 1
 
-    let candidates = s:get_candidates()
-    if !len(candidates)
-        call s:echo_warning('no candidates')
+    let candidate = s:get_candidate()
+    if candidate == {}
+        call s:echo_warning('no candidate')
         return ''
     endif
 
@@ -94,7 +94,7 @@ function! miosnippet#generate()
         return ''
     endif
 
-    let parsed = s:parse_signature(candidates[0].info, config)
+    let parsed = s:parse_signature(candidate.info, config)
     let snip = s:make_snip(parsed, config)
 
     let str = s:str_to_insert(parsed.name, snip, getline('.'))
